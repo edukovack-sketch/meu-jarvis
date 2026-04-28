@@ -21,7 +21,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Função auxiliar para testar a API
 async function testAPI() {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "models/gemini-1.0-pro" });
   await model.generateContent("Teste");
 }
 
@@ -50,9 +50,9 @@ app.post('/perguntar-jarvis', async (req, res) => {
       return res.status(400).json({ error: 'Mensagem não pode estar vazia' });
     }
 
-    // Modelo Gemini 1.5 Flash (Rápido e eficiente)
+    // Modelo Gemini 1.0 Pro (Rápido e eficiente)
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "models/gemini-1.0-pro",
       systemInstruction: "Seu nome é JARVIS. Você é o assistente virtual inteligente do Senhor. É especialista em programação, saúde, pesquisa e renda online. Responda de forma elegante, útil e com personalidade, sempre tratando o usuário como 'Senhor'. Mantenha um tom profissional mas amigável."
     });
 
@@ -91,14 +91,8 @@ app.get('/status', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-// Testa a chave antes de iniciar o servidor
-testAPIKey().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 JARVIS operacional na porta ${PORT}`);
-    console.log(`🌐 Acesse: http://localhost:${PORT}`);
-    console.log(`🤖 Usando: Google Gemini 1.5 Flash (API Gratuita)`);
-  });
-}).catch((error) => {
-  console.error('❌ Falha ao iniciar o servidor:', error);
-  process.exit(1);
+app.listen(PORT, () => {
+  console.log(`🚀 JARVIS operacional na porta ${PORT}`);
+  console.log(`🌐 Acesse: http://localhost:${PORT}`);
+  console.log(`🤖 Usando: Google Gemini 1.0 Pro (API Gratuita)`);
 });
