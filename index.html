@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>JARVIS - Interface</title>
+    <style>
+        body { background: #050a10; color: #00d4ff; font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; height: 100vh; margin: 0; }
+        #chat { width: 90%; max-width: 600px; height: 70vh; border: 1px solid #00d4ff; margin-top: 20px; overflow-y: auto; padding: 15px; background: rgba(0,0,0,0.8); border-radius: 10px; box-shadow: 0 0 15px #00d4ff; }
+        #input { width: 90%; max-width: 600px; padding: 15px; margin-top: 15px; background: none; border: 1px solid #00d4ff; color: #fff; border-radius: 5px; }
+        .msg { margin: 10px 0; }
+        .jarvis { color: #00d4ff; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>SISTEMA JARVIS OPERACIONAL</h2>
+    <div id="chat"></div>
+    <input type="text" id="input" placeholder="Diga algo, Senhor...">
+
+    <script>
+        const input = document.getElementById('input');
+        const chat = document.getElementById('chat');
+
+        input.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter') {
+                const text = input.value;
+                chat.innerHTML += `<div class="msg"><b>Senhor:</b> ${text}</div>`;
+                input.value = '';
+
+                const res = await fetch('/perguntar-jarvis', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ prompt: text })
+                });
+                const data = await res.json();
+                chat.innerHTML += `<div class="msg"><span class="jarvis">JARVIS:</span> ${data.resposta}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
